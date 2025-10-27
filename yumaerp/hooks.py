@@ -44,8 +44,8 @@ app_license = "mit"
 
 # include js in doctype views
 doctype_js = {
-    "Purchase Receipt": "yumaerp/doctype/purchase_receipt/purchase_receipt.js",
-    "Supplier Quotation": "pinnacle_production/doctype/supplier_quotation/supplier_quotation.js",
+    "Purchase Receipt": "yuma_erp/doctype/purchase_receipt/purchase_receipt.js",
+    "Supplier Quotation": "yuma_erp/doctype/supplier_quotation/supplier_quotation.js",
 }
 doctype_list_js = {
     "Supplier Quotation": "yumaerp/doctype/supplier_quotation/supplier_quotation_listview.js"
