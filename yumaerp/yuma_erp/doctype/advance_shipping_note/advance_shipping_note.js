@@ -36,6 +36,7 @@ frappe.ui.form.on("Advance Shipping Note", {
                         row.qty = po_item.qty - po_item.received_qty;
                         row.uom = po_item.uom;
                         row.rate = po_item.rate;
+						row.amount = po_item.amount;
                     });
                     frm.refresh_field(table_fieldname);
                 }
