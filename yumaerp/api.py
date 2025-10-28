@@ -1,5 +1,6 @@
 import frappe
 from frappe import _
+from frappe.model.mapper import get_mapped_doc
 
 
 @frappe.whitelist(allow_guest=True)
@@ -76,3 +77,54 @@ def register_supplier(supplier_data, address_data, contact_data=None):
         frappe.throw(
             _("Error creating Supplier, Address or Contact: {0}").format(str(e))
         )
+
+
+@frappe.whitelist()
+def make_asn_to_purchase_invoice(source_name, target_doc=None, args=None):
+    """Map Advance Shipping Note → Purchase Receipt"""
+
+    def update_item(source, target, source_parent):
+        # Copy quantity
+        target.qty = source.qty
+        # Set ASN reference in target child
+        if hasattr(target, "custom_advance_shipping_note"):
+            target.custom_advance_shipping_note = source_parent.name
+        # Set purchase order if field exists
+        if hasattr(target, "purchase_order"):
+            target.purchase_order = source_parent.purchase_order
+
+    doc = get_mapped_doc(
+        "Advance Shipping Note",
+        source_name,
+        {
+            "Advance Shipping Note": {
+                "doctype": "Purchase Receipt",  # Target DocType
+                "field_map": {
+                    "supplier": "supplier",
+                    "company": "company",
+                    "posting_date": "posting_date",
+                },
+            },
+            "ASN Items": {
+                "doctype": "Purchase Receipt Item",  # Target Child Table
+                "field_map": {
+                    "item_code": "item_code",
+                    "item_name": "item_name",
+                    "description": "description",
+                    "qty": "qty",
+                    "uom": "uom",
+                    "warehouse": "warehouse",
+                    "batch_no": "batch_no",
+                    "serial_no": "serial_no",
+                    "package_no": "package_no",
+                    "weight": "weight",
+                    "remarks": "remarks",
+                },
+                "postprocess": update_item,
+            },
+        },
+        target_doc,
+    )
+
+    return doc
+
