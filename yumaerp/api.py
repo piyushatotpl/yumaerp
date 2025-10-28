@@ -128,3 +128,30 @@ def make_asn_to_purchase_invoice(source_name, target_doc=None, args=None):
 
     return doc
 
+
+@frappe.whitelist(allow_guest=True)
+def get_supplier_for_user(user):
+    supplier = None
+    # Temporarily run as Administrator
+    old_user = frappe.session.user
+    try:
+        frappe.set_user("Administrator")  # Elevate permissions
+
+        # Replace with your actual child table Doctype name
+        supplier = frappe.db.sql(
+            """
+            SELECT parent
+            FROM `tabPortal User`
+            WHERE user = %s
+        """,
+            (user,),
+            as_dict=True,
+        )
+
+    finally:
+        # Restore original user
+        frappe.set_user(old_user)
+
+    if supplier:
+        return supplier[0].parent  # Return Supplier name
+    return None

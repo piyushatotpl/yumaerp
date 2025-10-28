@@ -74,6 +74,7 @@
    "fieldname": "purchase_order",
    "fieldtype": "Link",
    "label": "Purchase Order",
+   "link_filters": "[]",
    "options": "Purchase Order"
   },
   {
@@ -121,7 +122,7 @@
    "link_fieldname": "custom_advance_shipping_note"
   }
  ],
- "modified": "2025-10-28 15:30:12.510832",
+ "modified": "2025-10-28 17:21:39.750640",
  "modified_by": "Administrator",
  "module": "Yuma ERP",
  "name": "Advance Shipping Note",

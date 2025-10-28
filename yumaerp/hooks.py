@@ -24,13 +24,31 @@ app_license = "mit"
 # Includes in <head>
 # ------------------
 fixtures = [
+    # Web Page
     {
         "dt": "Web Page",
         "filters": [
-            ["name", "in", ["suplier-registration"]]  # Replace with your Web Page name
+            ["name", "in", ["suplier-registration"]]  # Replace with your Web Page name(s)
         ],
+    },
+
+    # Web Form
+    {
+        "dt": "Web Form",
+        "filters": [
+            ["name", "in", ["Supplier Registration"]]  # Replace with your Web Form name(s)
+        ],
+    },
+
+    # Portal Settings
+    {
+        "dt": "Portal Settings",
+        "filters": [
+            ["name", "=", "Portal Settings"]  # Usually the single record has this name
+        ]
     }
 ]
+
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/yumaerp/css/yumaerp.css"
