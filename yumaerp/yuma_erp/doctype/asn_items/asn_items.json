@@ -10,6 +10,7 @@
   "item_name",
   "description",
   "qty",
+  "rate",
   "uom",
   "schedule_date",
   "warehouse",
@@ -90,13 +91,19 @@
    "fieldname": "remarks",
    "fieldtype": "Small Text",
    "label": "Remarks"
+  },
+  {
+   "fieldname": "rate",
+   "fieldtype": "Data",
+   "label": "Rate",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-10-27 18:46:24.065592",
+ "modified": "2025-10-28 12:02:34.809163",
  "modified_by": "Administrator",
  "module": "Yuma ERP",
  "name": "ASN Items",

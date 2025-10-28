@@ -4,11 +4,15 @@ def validation(self, method):
     if not self.custom_supplier_invoice_no:
         return
 
-    # Get current fiscal year based on the posting date (or today if not set)
+    posting_date = self.posting_date or frappe.utils.today()
+
+    # Get current fiscal year based on posting date
     fiscal_year = frappe.db.get_value(
         "Fiscal Year",
-        {"year_start_date": ["<=", self.posting_date or frappe.utils.today()],
-         "year_end_date": [">=", self.posting_date or frappe.utils.today()]},
+        {
+            "year_start_date": ["<=", posting_date],
+            "year_end_date": [">=", posting_date],
+        },
         "name"
     )
 
@@ -20,21 +24,23 @@ def validation(self, method):
         "Fiscal Year", fiscal_year, ["year_start_date", "year_end_date"]
     )
 
-    # Check for duplicates in the same fiscal year (excluding current document)
+    # Check for duplicate for same GSTIN and Supplier Invoice No in the same fiscal year
     exists = frappe.db.exists(
         "Purchase Receipt",
         {
             "custom_supplier_invoice_no": self.custom_supplier_invoice_no,
+            "supplier": self.supplier,
             "posting_date": ["between", [fy_start, fy_end]],
-            "name": ["!=", self.name],  # ignore current document
+            "name": ["!=", self.name],  # exclude current doc
         },
     )
 
     if exists:
         link = f"/app/purchase-receipt/{exists}"
         frappe.throw(
-            f"Purchase Receipt with supplier invoice number "
-            f"'<b>{self.custom_supplier_invoice_no}</b>' already exists "
-            f"in fiscal year <b>{fiscal_year}</b>: "
+            f"Purchase Receipt with Supplier Invoice No "
+            f"'<b>{self.custom_supplier_invoice_no}</b>' for supplier "
+            f"'<b>{self.supplier}</b>' already exists "
+            f"in Fiscal Year <b>{fiscal_year}</b>: "
             f"<a href='{link}' target='_blank'>{exists}</a>"
         )
